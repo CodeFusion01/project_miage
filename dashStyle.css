@@ -1,0 +1,111 @@
+.container {
+  padding: 20px;
+}
+
+.box {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  padding: 55px 30px;
+  border-radius: 10px;
+  color: rgb(0, 0, 0);
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  transform: scale(0.99);
+  transition: 0.4s;
+}
+.box:hover {
+  transform: scale(0.96);
+}
+.boxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  gap: 20px;
+  padding: 20px;
+}
+.statics h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  color: rgb(15, 15, 15);
+  margin-bottom: 10px;
+}
+.statics span {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  color: rgb(15, 15, 15);
+}
+.icon i {
+  font-size: 45px;
+}
+#case_Allusers {
+  font-size: 35px;
+   color: rgb(60, 78, 131);
+}
+#case_Accusers {
+   color: rgb(64, 145, 64);
+}
+#case_UnAccusers {
+   color: rgb(138, 74, 74);
+}
+#case_Commusers {
+  color: rgb(153, 166, 93);
+  font-size: 35px;
+}
+.charts {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.chart01,
+.chart02 {
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  transform: scale(0.99);
+  transition: 0.4s;
+  padding: 15px;
+  border-radius: 20px;
+  color: rgb(22, 179, 22);
+  color: rgb(191, 32, 32);
+}
+
+.chart01:hover,
+.chart02:hover {
+  transform: scale(0.98);
+}
+
+#bx1 {
+  background-color: rgb(188, 203, 250);
+}
+#bx2 {
+  background-color: rgb(188, 250, 188);
+}
+#bx3 {
+  background-color: rgb(250, 188, 188);
+}
+#bx4 {
+  background-color: rgb(239, 250, 188);
+}
+
+@media screen and (max-width: 750px) {
+  .boxes {
+    flex-wrap: wrap;
+  }
+
+  .charts {
+    flex-wrap: wrap;
+  }
+
+  .container {
+    padding: 5px;
+  }
+}
