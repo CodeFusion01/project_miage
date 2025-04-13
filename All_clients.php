@@ -108,7 +108,7 @@ $result = $stmt->get_result();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-     <link rel="stylesheet" href="all_client.css?v=18" />
+     <link rel="stylesheet" href="all_client.css?v=16" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"rel="stylesheet"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Clients</title>
@@ -194,7 +194,7 @@ $result = $stmt->get_result();
             </div>
 
             <form method="get" class="search">         
-                    <input type="text" class="btnsearch" name="searchinput" value="<?= htmlspecialchars($search) ?>"  placeholder="Wnter what do you want ...">
+                    <input type="text" name="searchinput" value="<?= htmlspecialchars($search) ?>"  placeholder="Wnter what do you want ...">
                     <button type="submit"><i class='bx bx-search-alt-2'></i></button>             
             </form>
         </div>
@@ -248,7 +248,9 @@ $result = $stmt->get_result();
                 ?>
             </td>
             <td class="creatdName"><span>Creatd by</span><?php echo $row['created_by']; ?></td>
-              <td><a href="updateUsers.php?=<?php echo $row['id_client']; ?> "><i class='bx bx-edit'></i></a></td>
+            //? modification number:2
+            <td><a href="updateUsers.php?id_client=<?php echo $row['id_client']; ?>"><i class='bx bx-edit'></i></a></td>
+
             <td>
                 <form method="POST">
                     <input type="hidden" name="id_client" value="<?= $row['id_client'] ?>">
@@ -267,8 +269,7 @@ $result = $stmt->get_result();
     <script>
         const btnDrop = document.querySelector('.btnDrop'),
         catdrop = document.querySelector('.catdrop');
-        btnDrop.addEventListener('click',(event)=>{
-               event.stopPropagation();
+        btnDrop.addEventListener('click',()=>{
             catdrop.classList.toggle('show');
             catdrop2.classList.remove('show');
             catdrop3.classList.remove('show');
@@ -278,8 +279,7 @@ $result = $stmt->get_result();
 
         const btnDrop2 = document.querySelector('.btnDrop2'),
         catdrop2 = document.querySelector('.catdrop2');   
-        btnDrop2.addEventListener('click',(event)=>{
-               event.stopPropagation();
+        btnDrop2.addEventListener('click',()=>{
             catdrop2.classList.toggle('show');
             catdrop.classList.remove('show');
             catdrop3.classList.remove('show');
@@ -291,8 +291,7 @@ $result = $stmt->get_result();
 
         const btnDrop3 = document.querySelector('.btnDrop3'),
         catdrop3 = document.querySelector('.catdrop3');
-        btnDrop3.addEventListener('click',(event)=>{
-               event.stopPropagation();
+        btnDrop3.addEventListener('click',()=>{
             catdrop3.classList.toggle('show');
             catdrop.classList.remove('show');
             catdrop2.classList.remove('show');
@@ -301,23 +300,14 @@ $result = $stmt->get_result();
 
         const btnDrop4 = document.querySelector('.btnDrop4'),
         catdrop4 = document.querySelector('.catdrop4');
-        btnDrop4.addEventListener('click',(event)=>{
-               event.stopPropagation();
+        btnDrop4.addEventListener('click',()=>{
             catdrop4.classList.toggle('show');
             catdrop3.classList.remove('show');
             catdrop2.classList.remove('show');
              catdrop.classList.remove('show');
         });
 
-        window.addEventListener('click',()=>{
-            if(!catdrop.contains(event.target) && !catdrop.contains(event.arget) &&
-             !catdrop2.contains(event.target) && !catdrop3.contains(event.target) && !catdrop4.contains(event.target)){
-                 catdrop4.classList.remove('show');
-                catdrop3.classList.remove('show');
-                catdrop2.classList.remove('show');
-                catdrop.classList.remove('show');
-             }
-        })
+        
       
      function clearFilters() {
     window.location.href = window.location.pathname;
