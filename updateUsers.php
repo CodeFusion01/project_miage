@@ -23,7 +23,6 @@
 
 <?php
     include 'conn.php';
-    
     if (isset($_GET['id_client']) && !empty($_GET['id_client'])) {
         $id = $_GET['id_client'];
         $stmt = $conn->prepare("SELECT * FROM db_client WHERE id_client = ?");
@@ -70,7 +69,7 @@ if (isset($_POST['valider'])) {
 }
 ?>
             <form class="form-data" method="POST" action="">
-                
+                <input type="hidden" name="id_client" value="<?= $client['id_client'] ?>">
                 <input type="text" name="nom" placeholder="Nome" value="<?= htmlspecialchars($client['nom'] ?? '') ?>">
                 
                 <input type="text" name="prenom" placeholder="Prenome" value="<?= htmlspecialchars($client['prenom'] ?? '') ?>">
@@ -87,7 +86,7 @@ if (isset($_POST['valider'])) {
                         <option value="Industre" <?= ($client['categorie'] ?? '') == 'Industre' ? 'selected' : '' ?>>Industre</option>
                     </select>
                 </div>
-
+                //? modification number:1
                 <input type="text" name="poste" placeholder="Poste" value="<?= htmlspecialchars($client['poste'] ?? '') ?>">
                 
                 <div class="checkbox-select">
