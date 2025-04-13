@@ -1,7 +1,10 @@
 <?php
+ if (session_status() === PHP_SESSION_NONE) {
+           session_start();
+    }
     include 'conn.php';
 
-session_start();
+
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
@@ -52,14 +55,15 @@ $fistword = substr(trim($fistword),0,1);
         <div class="btnsMenu">
             <a href="dashboard.php"><i class='bx bxs-dashboard'></i>  <span>Dashboard</span></a>
             <a href="All_clients.php"><i class='bx bxs-user-detail'></i>  <span>Gestion Ecole</span></a>
-            <a href="@"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
-            <a href="@"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
-            <a href="@"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
-            <a href="@"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
+            <a href="Company_management.php"><i class='bx bx-buildings'></i> <span>Gestion Entreprises</span></a>
+            <a href="#"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
+            <a href="#"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
+            <a href="#"><i class='bx bxs-add-to-queue'></i>  <span>Vide</span></a>
           
         </div>
 
         <div class="btnlogout">
+             <a href="settings.php"><i class='bx bx-cog'></i>  <span>Setting</span></a>
              <a href="index.php"><i class='bx bx-log-in'></i>  <span>Log Out</span></a>
         </div>
     </div>

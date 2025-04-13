@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_client"])) {
         $status = 2;  
     }
 
-    $stmt = $conn->prepare("UPDATE `db_client` SET `status` = ? WHERE `id_client` = ?");
+    $stmt = $conn->prepare("UPDATE `gestion_entreprise` SET `status` = ? WHERE `id_client` = ?");
     $stmt->bind_param("ii", $status, $id);
     $stmt->execute();
     $stmt->close();
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["id_client"])) {
 
 $search = isset($_GET["searchinput"]) ? trim($_GET["searchinput"]) : "";
 
-$sql = "SELECT * FROM `db_client` WHERE 1"; 
+$sql = "SELECT * FROM `gestion_entreprise` WHERE 1"; 
 
 
    
@@ -36,6 +36,7 @@ if (!empty($search)) {
 $category = isset($_GET['category']) ? $_GET['category'] : '';
 $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
 $poste = isset($_GET['poste']) ? $_GET['poste'] : '';
+$zone = isset($_GET['zone']) ? $_GET['zone'] : '';
 $status_filter = isset($_GET['status']) ? intval($_GET['status']) : ''; 
 if (!empty($category)) {
     $sql .= " AND categorie = ?";
@@ -48,6 +49,10 @@ if (!empty($poste)) {
 }
 if ($status_filter !== '') {  
     $sql .= " AND `status` = ?";
+}
+
+if (!empty($zone)) {
+    $sql .= " AND `zone` = ?";
 }
 
 $stmt = $conn->prepare($sql);
@@ -83,44 +88,50 @@ if ($status_filter !== '') {  // If status filter is provided
     $params[] = &$status_filter;
 }
 
+if (!empty($zone)) {
+    $param_types .= "s";
+    $params[] = &$zone;
+}
+
 if (!empty($param_types)) {
     $stmt->bind_param($param_types, ...$params);
 }
 
 
-$ville_sql = "SELECT DISTINCT `ville` FROM `db_client`";
+$ville_sql = "SELECT DISTINCT `ville` FROM `setting_villes`";
 $ville_result = $conn->query($ville_sql);
 
-$post_sql = "SELECT DISTINCT `poste` FROM `db_client`";
+$post_sql = "SELECT DISTINCT `poste` FROM `gestion_entreprise`";
 $post_result = $conn->query($post_sql);
 
-$status_sql = "SELECT DISTINCT `status` FROM `db_client` WHERE `status` IN (0, 1, 2)";
+$status_sql = "SELECT DISTINCT `status` FROM `gestion_entreprise` WHERE `status` IN (0, 1, 2)";
 $status_result = $conn->query($status_sql);
 
+$zone_sql = "SELECT DISTINCT `zone_name` FROM `setting_zones`";
+$zone_result = $conn->query($zone_sql);
 
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
 
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-     <link rel="stylesheet" href="all_client.css?v=18" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"rel="stylesheet"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Clients</title>
-</head>
-<body>
-    <?php include 'menu.php'; ?>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="Company_management.css?v=2" />
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"rel="stylesheet"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>All Clients</title>
+    </head>
+    <body>
+        <?php include 'menu.php'; ?>
 
     <div class="container">
         <div class="navTable"> 
         <div class="typeDash"> 
          
-            <a href="data-entery.php"> <button><i class='bx bxs-user-plus'></i>Add</button></a>   
+            <a href="form_gestion_entreprise.php"> <button><i class='bx bxs-user-plus'></i>Add</button></a>   
             <h4>Dashboard Gestion Ecole</h4>
         </div>
 
@@ -191,6 +202,19 @@ $result = $stmt->get_result();
                               </div>
                         </form>          
                 </div>
+
+                  <div class="filter">
+                    <button class="btnDrop5"><i class='bx bx-filter-alt'></i> Zone <i class='bx bx-chevron-down'></i></button>
+                  
+                        <form method="GET" action="">  
+                            <div class="catdrop5">
+                            <?php while($row_zone = $zone_result->fetch_assoc()){ ?>
+                            <button type="submit" name="zone" value="<?php echo $row_zone['zone_name'] ?>"><?php echo ucfirst($row_zone['zone_name']);  ?></button>
+                            <?php } ;?>
+                              </div>
+                        </form>
+                  
+                </div>
             </div>
 
             <form method="get" class="search">         
@@ -203,17 +227,16 @@ $result = $stmt->get_result();
             <table>
                 <tr>
                     <th>Id</th>
+                    <th>Matricule</th>
                     <th>prenom</th>
-                    <th>nom</th>
-                    <th>Ville</th>
-                    <th>Categoris</th>
+                    <th>nom</th>                
                     <th>Poste</th>
+                    <th>Categoris</th>   
+                    <th>Ville</th>        
                     <th>Phone</th>
                      <th>Email</th>
-                    <th>M</th>
-                    <th>P</th>
-                    <th>C</th>
-                    <th>L</th>
+                    <th>Zone</th>
+                    
                     <th>Staut</th>  
                     <th>Created by</th>
                     <th>Option</th>
@@ -222,18 +245,16 @@ $result = $stmt->get_result();
 <?php while ($row = $result->fetch_assoc()) :?>
         <tr>
             <td><?= $row['id_client'] ?></td>
+            <td><?= $row['matricule'];?></td>
             <td><?= $row['nom'] ?></td>
             <td><?= $row['prenom'] ?></td>
-            <td><?= $row['ville'] ?></td>
-            <td><?= $row['categorie'] ?></td>
             <td><?= $row['poste'] ?></td>
+            <td><?= $row['categorie'] ?></td>
+            <td><?= $row['ville'] ?></td>
             <td><?= $row['phone'] ?></td>
             <td><?= $row['gmail'] ?></td>
-          
-                <td><input type="checkbox" <?= $row['marternelle'] == 1 ? 'checked' : " " ?>></td>
-                <td><input type="checkbox" <?= $row['primaire'] == 1 ? 'checked'  : " " ?>></td>
-                <td><input type="checkbox" <?= $row['college'] == 1 ? 'checked'  : " " ?>></td>
-                <td><input type="checkbox" <?= $row['lycee'] == 1 ? 'checked' : " " ?>></td>
+            <td><?= $row['zone'] ?></td>
+                
         
           
             <td>
@@ -264,65 +285,90 @@ $result = $stmt->get_result();
 
         </div>
     </div>
-    <script>
-        const btnDrop = document.querySelector('.btnDrop'),
-        catdrop = document.querySelector('.catdrop');
-        btnDrop.addEventListener('click',(event)=>{
-               event.stopPropagation();
-            catdrop.classList.toggle('show');
-            catdrop2.classList.remove('show');
-            catdrop3.classList.remove('show');
-            catdrop4.classList.remove('show');
-            
-        });
+ <script>
+      const btnDrop = document.querySelector('.btnDrop'),
+      catdrop = document.querySelector('.catdrop');
+const btnDrop2 = document.querySelector('.btnDrop2'),
+      catdrop2 = document.querySelector('.catdrop2');   
+const btnDrop3 = document.querySelector('.btnDrop3'),
+      catdrop3 = document.querySelector('.catdrop3');
+const btnDrop4 = document.querySelector('.btnDrop4'),
+      catdrop4 = document.querySelector('.catdrop4');
+const btnDrop5 = document.querySelector('.btnDrop5'),
+      catdrop5 = document.querySelector('.catdrop5');
 
-        const btnDrop2 = document.querySelector('.btnDrop2'),
-        catdrop2 = document.querySelector('.catdrop2');   
-        btnDrop2.addEventListener('click',(event)=>{
-               event.stopPropagation();
-            catdrop2.classList.toggle('show');
-            catdrop.classList.remove('show');
-            catdrop3.classList.remove('show');
-            catdrop4.classList.remove('show');
-        });
-   
+// Toggle dropdowns on button click
+btnDrop.addEventListener('click', (event) => {
+    event.stopPropagation();  // Prevent the click from propagating to the window click event
+    catdrop.classList.toggle('show');
+    catdrop2.classList.remove('show');
+    catdrop3.classList.remove('show');
+    catdrop4.classList.remove('show');
+    catdrop5.classList.remove('show');
+});
 
-     
+btnDrop2.addEventListener('click', (event) => {
+    event.stopPropagation();
+    catdrop2.classList.toggle('show');
+    catdrop.classList.remove('show');
+    catdrop3.classList.remove('show');
+    catdrop4.classList.remove('show');
+    catdrop5.classList.remove('show');
+});
 
-        const btnDrop3 = document.querySelector('.btnDrop3'),
-        catdrop3 = document.querySelector('.catdrop3');
-        btnDrop3.addEventListener('click',(event)=>{
-               event.stopPropagation();
-            catdrop3.classList.toggle('show');
-            catdrop.classList.remove('show');
-            catdrop2.classList.remove('show');
-            catdrop4.classList.remove('show');
-        });
+btnDrop3.addEventListener('click', (event) => {
+    event.stopPropagation();
+    catdrop3.classList.toggle('show');
+    catdrop.classList.remove('show');
+    catdrop2.classList.remove('show');
+    catdrop4.classList.remove('show');
+    catdrop5.classList.remove('show');
+});
 
-        const btnDrop4 = document.querySelector('.btnDrop4'),
-        catdrop4 = document.querySelector('.catdrop4');
-        btnDrop4.addEventListener('click',(event)=>{
-               event.stopPropagation();
-            catdrop4.classList.toggle('show');
-            catdrop3.classList.remove('show');
-            catdrop2.classList.remove('show');
-             catdrop.classList.remove('show');
-        });
+btnDrop4.addEventListener('click', (event) => {
+    event.stopPropagation();
+    catdrop4.classList.toggle('show');
+    catdrop3.classList.remove('show');
+    catdrop2.classList.remove('show');
+    catdrop5.classList.remove('show');
+    catdrop.classList.remove('show');
+});
 
-        window.addEventListener('click',()=>{
-            if(!catdrop.contains(event.target) && !catdrop.contains(event.arget) &&
-             !catdrop2.contains(event.target) && !catdrop3.contains(event.target) && !catdrop4.contains(event.target)){
-                 catdrop4.classList.remove('show');
-                catdrop3.classList.remove('show');
-                catdrop2.classList.remove('show');
-                catdrop.classList.remove('show');
-             }
-        })
-      
-     function clearFilters() {
+btnDrop5.addEventListener('click', (event) => {
+    event.stopPropagation();
+    catdrop5.classList.toggle('show');
+    catdrop4.classList.remove('show');
+    catdrop3.classList.remove('show');
+    catdrop2.classList.remove('show');
+    catdrop.classList.remove('show');
+});
+
+// Close all dropdowns when clicking outside
+window.addEventListener('click', (event) => {
+    // Check if the click is outside of any of the dropdowns
+    if (!catdrop.contains(event.target) && 
+        !catdrop2.contains(event.target) && 
+        !catdrop3.contains(event.target) && 
+        !catdrop4.contains(event.target) && 
+        !catdrop5.contains(event.target)) {
+        
+        // Remove the 'show' class from all dropdowns
+        catdrop.classList.remove('show');
+        catdrop2.classList.remove('show');
+        catdrop3.classList.remove('show');
+        catdrop4.classList.remove('show');
+        catdrop5.classList.remove('show');
+    }
+});
+
+// Optional: Function to clear filters (reset the page)
+function clearFilters() {
     window.location.href = window.location.pathname;
 }
 
+   
+
   </script>
-</body>
+    </body>
+  
 </html>

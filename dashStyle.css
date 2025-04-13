@@ -24,8 +24,8 @@
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  gap: 20px;
-  padding: 20px;
+  gap: 30px;
+  padding: 40px;
 }
 .statics h2 {
   font-family: Arial, Helvetica, sans-serif;
@@ -43,13 +43,13 @@
 }
 #case_Allusers {
   font-size: 35px;
-   color: rgb(60, 78, 131);
+  color: rgb(60, 78, 131);
 }
 #case_Accusers {
-   color: rgb(64, 145, 64);
+  color: rgb(64, 145, 64);
 }
 #case_UnAccusers {
-   color: rgb(138, 74, 74);
+  color: rgb(138, 74, 74);
 }
 #case_Commusers {
   color: rgb(153, 166, 93);
@@ -57,7 +57,7 @@
 }
 .charts {
   width: 100%;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 10px;

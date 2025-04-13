@@ -63,7 +63,7 @@ while ($row = $result->fetch_assoc()) {
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="dashStyle.css?v=7" />
+    <link rel="stylesheet" href="dashStyle.css?v=8" />
     <link
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
