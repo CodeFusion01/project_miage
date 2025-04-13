@@ -86,7 +86,7 @@ if (isset($_POST['valider'])) {
                         <option value="Industre" <?= ($client['categorie'] ?? '') == 'Industre' ? 'selected' : '' ?>>Industre</option>
                     </select>
                 </div>
-                //? modification number:1
+                
                 <input type="text" name="poste" placeholder="Poste" value="<?= htmlspecialchars($client['poste'] ?? '') ?>">
                 
                 <div class="checkbox-select">
