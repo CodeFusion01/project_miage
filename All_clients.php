@@ -248,7 +248,7 @@ $result = $stmt->get_result();
                 ?>
             </td>
             <td class="creatdName"><span>Creatd by</span><?php echo $row['created_by']; ?></td>
-            //? modification number:2
+            
             <td><a href="updateUsers.php?id_client=<?php echo $row['id_client']; ?>"><i class='bx bx-edit'></i></a></td>
 
             <td>
